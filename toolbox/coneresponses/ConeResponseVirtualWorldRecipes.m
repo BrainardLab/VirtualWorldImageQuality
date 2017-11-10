@@ -47,7 +47,7 @@ hints.workingFolder = fullfile(getpref(projectName, 'baseFolder'),parser.Results
 set(0, 'DefaultAxesFontSize', 14)
 
 %% Analyze each packed up recipe.
-archiveFiles = FindWorldRecipes(recipeFolder, luminanceLevels, reflectanceNumbers);
+archiveFiles = FindVirtualWorldRecipes(recipeFolder, luminanceLevels, reflectanceNumbers);
 nRecipes = numel(archiveFiles);
 
 % Outputs for AMA

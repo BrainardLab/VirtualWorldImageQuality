@@ -1,7 +1,7 @@
-function archiveFiles = FindWorldRecipes(recipeFolder, luminanceLevels, reflectanceNumbers)
+function archiveFiles = FindVirtualWorldRecipes(recipeFolder, luminanceLevels, reflectanceNumbers)
 % Find recipes by parameter values, in the given recipeFolder.
 %
-% archiveFiles = FindWorldRecipes(recipeFolder, luminanceLevels, reflectanceNumbers)
+% archiveFiles = FindVirtualWorldRecipes(recipeFolder, luminanceLevels, reflectanceNumbers)
 % searches the given recipeFolder for Toy Virtual World recipes.  If
 % luminanceLevels and reflectanceNumbers are provided, searches for recipes
 % based on their names, using these parameter values.  Otherwise, looks for
