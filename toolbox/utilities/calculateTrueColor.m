@@ -8,8 +8,7 @@ function trueColor = calculateTrueColor(targetLuminanceLevel, reflectanceNumber,
 % Description:
 %     This function calcualtes the color of the target material given the
 %     luminance level and the reflectance number. The corresponding file is
-%     read from the 
-%     VirtualWorldColorConstancy/Resources/Reflectance/TargetObjects folder
+%     read from the Resources/Reflectance/TargetObjects folder
 %
 % Input:
 %   targetLuminanceLevel = target luminance level of the file(scalar)

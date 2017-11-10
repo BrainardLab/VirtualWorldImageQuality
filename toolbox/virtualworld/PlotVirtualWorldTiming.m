@@ -49,7 +49,7 @@ for ff = 1:nFolders
     folderInfo(ff).label = sprintf('%s %d', folderInfo(ff).subfolder, folderInfo(ff).nFiles);
 end
 
-folderInfoFile = fullfile(workingFolder, 'VirtualWorldColorConstancyTiming');
+folderInfoFile = fullfile(workingFolder, 'VirtualWorldImageQualityTiming');
 save(folderInfoFile);
 
 
@@ -59,8 +59,8 @@ bar([timing; zeros(size(timing))], 'stacked');
 legend({folderInfo(2:end).label});
 set(gca(), 'XTick', 1, 'XTickLabel', {});
 ylabel('processing time (minutes)');
-title('VirtualWorldColorConstancy Timing');
+title('VirtualWorldImageQuality Timing');
 
-figureFile = fullfile(workingFolder, 'VirtualWorldColorConstancyTiming');
+figureFile = fullfile(workingFolder, 'VirtualWorldImageQualityTiming');
 savefig(figureFile);
 

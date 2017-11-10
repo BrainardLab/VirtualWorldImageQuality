@@ -2,7 +2,7 @@ function makeFullMontage(pathToFolder,luminanceLevels,reflectanceNumbers,RecipeN
 % makeFullMontage(pathToFolder,luminanceLevels,reflectanceNumbers,RecipeConditions,varargin)
 %
 % Usage: 
-%     makeFullMontage(fullfile('/Volumes/OWSHD','Dropbox (Aguirre-Brainard Lab)','/IBIO_analysis/VirtualWorldColorConstancy/ExampleOutput'),[0.2 0.4 0.6], [1:5],[])
+%     makeFullMontage(fullfile('/Volumes/OWSHD','Dropbox (Aguirre-Brainard Lab)','/IBIO_analysis/VirtualWorldImageQuality/ExampleOutput'),[0.2 0.4 0.6], [1:5],[])
 %
 % Description:
 %     This function returns the montage of full image, cropped image and 

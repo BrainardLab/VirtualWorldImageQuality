@@ -1,4 +1,4 @@
-function ConeResponseWorldRecipes(varargin)
+function ConeResponseVirtualWorldRecipes(varargin)
 %% Locate, unpack, and execute many WardLand recipes created earlier.
 %
 % Use this script to get cone responses.
@@ -22,26 +22,26 @@ cropImageHalfSize = parser.Results.cropImageHalfSize;
 %% Overall Setup.
 
 % location of packed-up recipes
-projectName = 'VirtualWorldColorConstancy';
-recipeFolder = fullfile(getpref(projectName, 'baseFolder'),parser.Results.outputName, 'Originals');
+projectName = 'VirtualWorldImageQuality';
+recipeFolder = fullfile(getpref(projectName, 'outputDataFolder'),parser.Results.outputName, 'Originals');
 if ~exist(recipeFolder, 'dir')
     disp(['Recipe folder not found: ' recipeFolder]);
 end
 
-if ~exist(fullfile(getpref(projectName, 'baseFolder'),parser.Results.outputName,'AllRenderings'),'dir')
-    mkdir(fullfile(getpref(projectName, 'baseFolder'),parser.Results.outputName,'AllRenderings'));
+if ~exist(fullfile(getpref(projectName, 'outputDataFolder'),parser.Results.outputName,'AllRenderings'),'dir')
+    mkdir(fullfile(getpref(projectName, 'outputDataFolder'),parser.Results.outputName,'AllRenderings'));
 end
 
 % location of analysed folder
-analysedFolder = fullfile(getpref(projectName, 'baseFolder'),parser.Results.outputName,'ConeResponse');
+analysedFolder = fullfile(getpref(projectName, 'outputDataFolder'),parser.Results.outputName,'ConeResponse');
 
 % location of reflectance folder
-pathToTargetReflectanceFolder = fullfile(getpref(projectName, 'baseFolder'),...
+pathToTargetReflectanceFolder = fullfile(getpref(projectName, 'outputDataFolder'),...
     parser.Results.outputName,'Data','Reflectances','TargetObjects');
 
 % edit some batch renderer options
 hints.renderer = 'Mitsuba';
-hints.workingFolder = fullfile(getpref(projectName, 'baseFolder'),parser.Results.outputName,'Working');
+hints.workingFolder = fullfile(getpref(projectName, 'outputDataFolder'),parser.Results.outputName,'Working');
 
 % easier to read plots
 set(0, 'DefaultAxesFontSize', 14)
@@ -154,7 +154,7 @@ parfor ii = 1:nRecipes
         %% Make Figures for Visualization
         makeFigureForVisualization(coneResponse,archiveBase,hints.workingFolder);
     catch err
-        SaveToyVirutalWorldError(analysedFolder, err, recipe, varargin);
+        SaveVirtualWorldError(analysedFolder, err, recipe, varargin);
     end
     
 end
@@ -191,7 +191,7 @@ allLMSIndicator = allLMSIndicator(:,:,1);
 % allNNLMS = calculateNearestLMSResponse(numLMSCones,allLMSPositions,allLMSResponses,3);
 
 
-save(fullfile(getpref(projectName, 'baseFolder'),parser.Results.outputName,'stimulusAMA.mat'),...
+save(fullfile(getpref(projectName, 'outputDataFolder'),parser.Results.outputName,'stimulusAMA.mat'),...
     'luminanceLevel','ctgInd','numLMSCones',...
     'allLMSResponses','allLMSPositions','coneRescalingFactors',...
     'allDemosaicResponse','allLMSIndicator','trueXYZ','-v7.3');

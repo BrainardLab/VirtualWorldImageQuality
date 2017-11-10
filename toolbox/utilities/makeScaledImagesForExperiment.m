@@ -20,12 +20,12 @@ function makeScaledImagesForExperiment(outputName, nStimuli)
 %
 % VS wrote this
 %% Basic setup we don't want to expose as parameters.
-projectName = 'VirtualWorldColorConstancy';
+projectName = 'VirtualWorldImageQuality';
 hints.renderer = 'Mitsuba';
 hints.isPlot = false;
 
-pathToFolder = fullfile(getpref(projectName, 'baseFolder'),outputName);
-lightnessLevelFile = fullfile(getpref(projectName, 'baseFolder'),outputName,'lightnessLevels.mat');
+pathToFolder = fullfile(getpref(projectName, 'outputDataFolder'),outputName);
+lightnessLevelFile = fullfile(getpref(projectName, 'outputDataFolder'),outputName,'lightnessLevels.mat');
 lightness = load(lightnessLevelFile);
 
 %%

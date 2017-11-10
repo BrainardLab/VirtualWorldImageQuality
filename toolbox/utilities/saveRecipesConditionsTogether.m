@@ -7,7 +7,7 @@ function saveRecipesConditionsTogether(parser)
 % Description:
 %   This function saves the recipe conditions specified in the fieldNames
 %   variable below and saves it to the Cases/Cases.txt file in the
-%   VirtualWorldColorConstancy folder. 
+%   VirtualWorldImageQuality folder. 
 %   If /Cases/Cases.txt does not exits this creates the corresponding file
 %   and directory and saves the recipe data. Otherwise it appends the
 %   information to the existing file.
@@ -18,11 +18,11 @@ function saveRecipesConditionsTogether(parser)
 % Written by VS 02/02/2017
 
 
-projectName = 'VirtualWorldColorConstancy';
-if ~exist(fullfile(getpref(projectName, 'baseFolder'),'Cases'))
-    mkdir(fullfile(getpref(projectName, 'baseFolder'),'Cases'))
+projectName = 'VirtualWorldImageQuality';
+if ~exist(fullfile(getpref(projectName, 'outputDataFolder'),'Cases'))
+    mkdir(fullfile(getpref(projectName, 'outputDataFolder'),'Cases'))
 end
-filename = fullfile(getpref(projectName, 'baseFolder'),'Cases','Cases.txt');
+filename = fullfile(getpref(projectName, 'outputDataFolder'),'Cases','Cases.txt');
 
 fieldNames = {
     'outputName'
