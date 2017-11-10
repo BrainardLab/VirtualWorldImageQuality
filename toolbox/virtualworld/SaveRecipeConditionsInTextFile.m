@@ -39,5 +39,5 @@ for numFields = 1:numel(fieldNames)
     end
     fprintf(fid, '\n');
 end
-
+ß
 fclose(fid);

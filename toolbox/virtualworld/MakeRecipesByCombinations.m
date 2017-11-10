@@ -1,17 +1,17 @@
 function MakeRecipesByCombinations(varargin)
-%% Construct and archive a set of many Ward Land recipes.
+%  MakeRecipesByCombinations  Construct and archive a set of many Ward Land recipes.
 %
 % The idea here is to generate many WardLand scenes.  We choose values for
 % several parameter sets and build a scene for several combinations of
 % parameter values, drawing from each parameter set.
 %
 % Key/value pairs
-%   'outputName' - Output File Name, Default ExampleOutput
-%   'imageWidth' - image width, Should be kept small to keep redering time
+%   'outputName' - Output folder name (default 'ExampleOutput')
+%   'imageWidth' - Image width, should be kept small to keep redering time
 %                   low for rejected recipes
-%   'imageHeight'- image height, Should be kept small to keep redering time
+%   'imageHeight'- Image height, Should be kept small to keep redering time
 %                   low for rejected recipes
-%   'makeCropImageHalfSize'  - size of cropped patch
+%   'makeCropImageHalfSize'  - Size of cropped patch
 %   'nOtherObjectSurfaceReflectance' - Number of spectra to be generated
 %                   for choosing background surface reflectance (max 999)
 %   'luminanceLevels' - luminance levels of target object
@@ -95,6 +95,8 @@ parser.addParameter('lightShapeSet', ...
 parser.addParameter('baseSceneSet', ...
     {'CheckerBoard', 'IndoorPlant', 'Library', 'Mill', 'TableChairs', 'Warehouse'}, @iscellstr);
 parser.parse(varargin{:});
+
+% Allocate parsed fields to local variable names
 imageWidth = parser.Results.imageWidth;
 imageHeight = parser.Results.imageHeight;
 cropImageHalfSize = parser.Results.cropImageHalfSize;
@@ -127,8 +129,9 @@ if (~exist(originalFolder, 'dir'))
     mkdir(originalFolder);
 end
 
-%% HERE IS WHAT I THINK.  THIS CODE WILL CHANGE THE SIZE OF THE IMAGE.
-
+%% Set size of output image
+%
+% We think the hints fields set the size of the rendered image.
 hints.imageHeight = imageHeight;
 hints.imageWidth = imageWidth;
 
@@ -138,7 +141,9 @@ aioPrefs.locations = aioLocation( ...
     'strategy', 'AioFileSystemStrategy', ...
     'baseDir', fullfile(vseaRoot(), 'examples'));
 
-%% Choose base scene to pick from
+%% Get base scenes
+%
+% This loads in base scenes from our assets
 nBaseScenes = numel(baseSceneSet);
 baseScenes = cell(1, nBaseScenes);
 baseSceneInfos = cell(1, nBaseScenes);
@@ -149,9 +154,9 @@ for bb = 1:nBaseScenes
         'nameFilter', 'blend$');
 end
 
-%% Choose shapes to insert.
-
-% this will load object models, like above
+%% Get shapes to insert.
+%
+% This will load object models, as above for base scenes
 nObjectShapes = numel(objectShapeSet);
 objectShapes = cell(1, nObjectShapes);
 for ss = 1:nObjectShapes
@@ -161,7 +166,9 @@ for ss = 1:nObjectShapes
         'nameFilter', 'blend$');
 end
 
-% this will load light models, like above
+%% Get light shapes to insert
+%
+% This will load light models, as above
 nLightShapes = numel(lightShapeSet);
 lightShapes = cell(1, nLightShapes);
 for ss = 1:nLightShapes
@@ -222,7 +229,7 @@ illuminantSpectra = aioGetFiles('Illuminants', 'BaseScene', ...
     'aioPrefs', illuminantsAioPrefs, ...
     'fullPaths', false);
 
-%% Choose Reflectance for scene overall
+%% Choose reflectance for scene overall
 otherObjectLocations.config.baseDir = dataBaseDir;
 otherObjectLocations.name = 'WorldReflectances';
 otherObjectLocations.strategy = 'AioFileSystemStrategy';
