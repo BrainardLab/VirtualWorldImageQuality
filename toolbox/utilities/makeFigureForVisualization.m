@@ -6,7 +6,7 @@ function makeFigureForVisualization(coneResponse,archiveBase,workingFolder)
 %     makeFigureForVisualization(coneResponse,archiveBase,workingFolder)
 %
 % Description:
-%     This funciton is used with the ConeResponseToyVirtualWorldRecipes
+%     This funciton is used with the ConeResponseWorldRecipes
 %     function to make pdf files that give the summary of the images 
 %     generated in each recipe. 
 %

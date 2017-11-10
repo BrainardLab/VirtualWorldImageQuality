@@ -1,4 +1,4 @@
-function ConeResponseToyVirtualWorldRecipes(varargin)
+function ConeResponseWorldRecipes(varargin)
 %% Locate, unpack, and execute many WardLand recipes created earlier.
 %
 % Use this script to get cone responses.
@@ -47,7 +47,7 @@ hints.workingFolder = fullfile(getpref(projectName, 'baseFolder'),parser.Results
 set(0, 'DefaultAxesFontSize', 14)
 
 %% Analyze each packed up recipe.
-archiveFiles = FindToyVirtualWorldRecipes(recipeFolder, luminanceLevels, reflectanceNumbers);
+archiveFiles = FindWorldRecipes(recipeFolder, luminanceLevels, reflectanceNumbers);
 nRecipes = numel(archiveFiles);
 
 % Outputs for AMA

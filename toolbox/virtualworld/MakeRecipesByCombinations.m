@@ -214,7 +214,7 @@ end
 %%
 % Choose illuminant spectra from the illuminants folder.
 illuminantsLocations.config.baseDir = dataBaseDir;
-illuminantsLocations.name = 'ToyVirtualWorldIlluminants';
+illuminantsLocations.name = 'WorldIlluminants';
 illuminantsLocations.strategy = 'AioFileSystemStrategy';
 illuminantsAioPrefs = aioPrefs;
 illuminantsAioPrefs.locations = illuminantsLocations;
@@ -224,7 +224,7 @@ illuminantSpectra = aioGetFiles('Illuminants', 'BaseScene', ...
 
 %% Choose Reflectance for scene overall
 otherObjectLocations.config.baseDir = dataBaseDir;
-otherObjectLocations.name = 'ToyVirtualWorldReflectances';
+otherObjectLocations.name = 'WorldReflectances';
 otherObjectLocations.strategy = 'AioFileSystemStrategy';
 otherObjectAioPrefs = aioPrefs;
 otherObjectAioPrefs.locations = otherObjectLocations;
@@ -235,7 +235,7 @@ baseSceneReflectances = otherObjectReflectances;
 
 %% Choose Reflectance for target object overall
 targetLocations.config.baseDir = dataBaseDir;
-targetLocations.name = 'ToyVirtualWorldTarget';
+targetLocations.name = 'WorldTarget';
 targetLocations.strategy = 'AioFileSystemStrategy';
 targetAioPrefs = aioPrefs;
 targetAioPrefs.locations = targetLocations;

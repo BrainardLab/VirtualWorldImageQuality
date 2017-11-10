@@ -6,9 +6,9 @@ function saveRecipeConditionsInTextFile(p)
 %
 % Description:
 %   This function writes all the fields specified in the parser of the
-%   RunToyVirtualWorldRecipes function to the file recipeSummary.txt and
+%   RunWorldRecipes function to the file recipeSummary.txt and
 %   saves the file in the outputName folder of the outputName specified in
-%   RunToyVirtualWorldRecipes.
+%   RunWorldRecipes.
 %
 % Input:
 %   parser = struct with the recipe information
