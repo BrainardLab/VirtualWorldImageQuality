@@ -41,7 +41,7 @@
 		"localHookTemplate": "configuration/virtualWorldImageQualityLocalHookTemplate.m",
 		"name": "VirtualWorldImageQuality",
 		"pathPlacement": "append",
-		"subfolder": "",
+		"subfolder": ["toolbox"],
 		"toolboxRoot": "",
 		"type": "git",
 		"update": "",

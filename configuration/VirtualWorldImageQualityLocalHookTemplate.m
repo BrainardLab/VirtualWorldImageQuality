@@ -11,6 +11,11 @@
 %% Set up some parameters for portability
 projectName = 'VirtualWorldImageQuality';
 
+%% Clear old prefs
+if (ispref(projectName))
+    rmpref(projectName);
+end
+
 %% Where does output go
 % 
 % The default for output if you are not a recognized user is in a subdir
@@ -46,9 +51,15 @@ switch (computerName)
         dataDirRoot = fullfile(rtbGetUserFolder(), 'output');    
 end
 
+% The preference 'baseDir' sets where we write the data
 dataDirName = 'VirtualWorldImageQuality';
 dataDir = fullfile(dataDirRoot,projectName,'');
 if (~exist(dataDir,'dir'))
     mkdir(dataDir);
 end
-setpref(projectName, 'baseFolder',dataDir);
+setpref(projectName,'outputDataFolder',fullfile(dataDir,'OutputData'));
+
+%% Where do data come from?
+setpref(projectName,'inputDataFolder',fullfile(dataDir,'InputData'));
+
+
