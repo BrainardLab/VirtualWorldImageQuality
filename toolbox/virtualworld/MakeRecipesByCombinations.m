@@ -650,6 +650,6 @@ parfor sceneIndex = 1:nScenes
         sceneRecord(sceneIndex) = workingRecord;
         
     catch err
-        SaveToyVirutalWorldError(originalFolder, err, workingRecord.recipe, workingRecord);
+        SaveVirtualWorldError(originalFolder, err, workingRecord.recipe, workingRecord);
     end
 end

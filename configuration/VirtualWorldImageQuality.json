@@ -38,7 +38,7 @@
 	{
 		"flavor": "",
 		"hook": "",
-		"localHookTemplate": "configuration/virtualWorldImageQualityLocalHookTemplate.m",
+		"localHookTemplate": "configuration/VirtualWorldImageQualityLocalHookTemplate.m",
 		"name": "VirtualWorldImageQuality",
 		"pathPlacement": "append",
 		"subfolder": ["toolbox"],
