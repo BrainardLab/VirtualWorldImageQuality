@@ -277,7 +277,7 @@ end
 
 % iterate scene records with one parfor loop
 % Matlab does not support nested parfor loops
-parfor sceneIndex = 1:nScenes
+for sceneIndex = 1:nScenes
     workingRecord = sceneRecord(sceneIndex);
     
     try
