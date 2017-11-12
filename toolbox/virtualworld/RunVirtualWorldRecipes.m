@@ -116,14 +116,13 @@ cropImageHalfSize = parser.Results.cropImageHalfSize;
 luminanceLevels = parser.Results.luminanceLevels;
 reflectanceNumbers = parser.Results.reflectanceNumbers;
 mosaicHalfSize = parser.Results.mosaicHalfSize;
-saveRecipesConditionsTogether(parser);
 
 %% Set up full-sized parpool if available.
-if exist('parpool', 'file')
-    delete(gcp('nocreate'));
-    nCores = feature('numCores');
-    parpool('local', nCores);
-end
+% if exist('parpool', 'file')
+%     delete(gcp('nocreate'));
+%     nCores = feature('numCores');
+%     parpool('local', nCores);
+% end
 
 %% Go through the steps for this combination of parameters.
 try
