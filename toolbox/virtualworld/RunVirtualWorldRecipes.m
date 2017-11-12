@@ -72,7 +72,6 @@ rng('shuffle');
 
 %% Get inputs and defaults.
 p = inputParser();
-p.KeepUnmatched = true;
 p.addParameter('outputName','ExampleOutput',@ischar);
 p.addParameter('imageWidth', 320, @isnumeric);
 p.addParameter('imageHeight', 240, @isnumeric);
@@ -115,7 +114,7 @@ p.parse(varargin{:});
 
 %% Go through the steps for this combination of parameters.
 try
-    % using one base scene and one object at a time
+    % Using one base scene and one object at a time
     MakeRecipesByCombinations( ...
         'outputName',p.Results.outputName,...
         'imageWidth', p.Results.imageWidth, ...
@@ -142,6 +141,8 @@ try
         'objectShapeSet', p.Results.objectShapeSet, ...
         'lightShapeSet', p.Results.lightShapeSet, ...
         'baseSceneSet', p.Results.baseSceneSet);
+    
+    
     
 catch err
     workingFolder = fullfile(getpref('VirtualWorldImageQuality', 'outputDataFolder'),p.Results.outputName);

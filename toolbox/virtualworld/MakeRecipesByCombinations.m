@@ -633,7 +633,15 @@ for sceneIndex = 1:nScenes
         rtbPackUpRecipe(workingRecord.recipe, archiveFile, 'ignoreFolders', excludeFolders);
         
         % Make a luminance image
-               
+        theHyperspectralImage = load(fullfile(hints.workingFolder,workingRecord.hints.recipeName,'renderings','Mitsuba','normal.mat'));
+        xyzInfo = load('T_xyz1931');
+        T_xyz = SplineCmf(xyzInfo.S_xyz1931,xyzInfo.T_xyz1931,theHyperspectralImage.S);
+        [multispectralCalFormat,m,n] = ImageToCalFormat(theHyperspectralImage.multispectralImage);
+        XYZCalFormat = T_xyz*multispectralCalFormat;
+        luminanceImage = CalFormatToImage(XYZCalFormat(2,:),m,n);
+        save(fullfile(hints.workingFolder,workingRecord.hints.recipeName,'renderings','Mitsuba','luminanceImage'),'luminanceImage');
+        imwrite(luminanceImage/max(luminanceImage(:)),fullfile(hints.workingFolder,workingRecord.hints.recipeName,'images','Mitsuba',[workingRecord.hints.recipeName,'_luminanceImage.png']),'png');
+
     catch err
         % Try to save out some diagnostic information if the rendering
         % barfs.
