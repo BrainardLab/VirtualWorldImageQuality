@@ -1,11 +1,11 @@
-function MakeRecipesByCombinations(varargin)
-%  MakeRecipesByCombinations  Construct and archive a set of many Ward Land recipes.
+function MakeParametricRecipe(varargin)
+% MakeParametricRecipe  Construct and render a recipe, with parametric control.
 %
-% The idea here is to generate many WardLand scenes.  We choose values for
-% several parameter sets and build a scene for several combinations of
-% parameter values, drawing from each parameter set.
+% Description:
+%   Setup and render a recipe where we insert an object into a base scene,
+%   and provide parametric control over key scene parameters.
 %
-% Key/value pairs
+% Optional key/value pairs
 %   'outputName' - Output folder name (default 'ExampleOutput')
 %   'imageWidth' - Image width, should be kept small to keep redering time
 %                   low for rejected recipes
@@ -17,8 +17,6 @@ function MakeRecipesByCombinations(varargin)
 %   'reflectanceNumbers' - A row vetor containing Reflectance Numbers of
 %                   target object. These are just dummy variables to give a
 %                   unique name to each random spectra.
-%   'nInsertedLights' - Number of inserted lights
-%   'nInsertObjects' - Number of inserted objects (other than target object)
 %   'otherObjectReflectanceRandom' - boolean to specify if spectra of
 %                   background objects is random or not. Default true
 %   'illuminantSpectraRandom' - boolean to specify if spectra of
@@ -64,8 +62,6 @@ p.addParameter('cropImageHalfSize', 25, @isnumeric);
 p.addParameter('nOtherObjectSurfaceReflectance', 100, @isnumeric);
 p.addParameter('luminanceLevels', [0.2 0.6], @isnumeric);
 p.addParameter('reflectanceNumbers', [1 2], @isnumeric);
-p.addParameter('nInsertedLights', 1, @isnumeric);
-p.addParameter('nInsertObjects', 0, @isnumeric);
 p.addParameter('otherObjectReflectanceRandom', true, @islogical);
 p.addParameter('illuminantSpectraRandom', true, @islogical);
 p.addParameter('illuminantSpectrumNotFlat', true, @islogical);
@@ -294,7 +290,7 @@ for sceneIndex = 1:nScenes
     workingRecord = sceneRecord(sceneIndex);
     
     
-    try
+%    try
         % Try/catch in case something goes awry with the rendering.
         % Nothing should go wrong, but you never know.  The catch statement
         % below tries to save out some diagnostic information if there is
@@ -371,14 +367,10 @@ for sceneIndex = 1:nScenes
         % Set up target for insertion after transformation.  The
         % insertShapes cell array will hold information for the target
         % object plus the additional inserted objects.
-        insertShapes = cell(1, p.Results.nInsertObjects+1);
+        insertShapes = cell(1, 1);
         insertShapes{1} = targetShape.copy( ...
             'name', 'shape-01', ...
             'transformation', transformation);
-        
-        % Pick other objects and light shapes to insert
-        %
-        % For each shape to insert, choose a random spatial transformation.
         
         % Store the shape, locations, rotation, etc. of each of the
         % inserted objects in a conditions.txt file
@@ -406,96 +398,6 @@ for sceneIndex = 1:nScenes
             [targetRotationX targetRotationY targetRotationZ], ...
             targetScale};
         allValues = cat(2, allValues, varValues);
-        
-        % This seems to do the same thing for the other objects
-        otherShapeIndices = randi(nObjectShapes, [1, p.Results.nInsertObjects]);
-        for sss = 1:p.Results.nInsertObjects
-            shape = objectShapes{otherShapeIndices(sss)};
-            
-            rotationX = randi([0, 359]);
-            rotationY = randi([0, 359]);
-            rotationZ = randi([0, 359]);
-            position = GetRandomPosition([0 0; 0 0; 0 0], baseSceneInfo.objectBox);
-            scale = 0.3 + rand()/2;
-            transformation = mexximpScale(scale) ...
-                * mexximpRotate([1 0 0], rotationX) ...
-                * mexximpRotate([0 1 0], rotationY) ...
-                * mexximpRotate([0 0 1], rotationZ) ...
-                * mexximpTranslate(position);
-            
-            % Tuck info info away.
-            %            
-            % The addition of 1 to sss here and in the column headers for
-            % the conditions file below is because the first inserted shape
-            % is the target object.
-            shapeName = sprintf('shape-%d', sss+1);
-            insertShapes{sss+1} = shape.copy( ...
-                'name', shapeName, ...
-                'transformation', transformation);
-            
-            % Setup for saving the position, scale and rotation of the
-            % other inserted objects in the conditions file.
-            objectColumn = sprintf('object-%d', sss+1);
-            positionColumn = sprintf('object-position-%d', sss+1);
-            rotationColumn = sprintf('object-rotation-%d', sss+1);
-            scaleColumn = sprintf('object-scale-%d', sss+1);
-            varNames = {objectColumn, positionColumn, rotationColumn, scaleColumn};
-            allNames = cat(2, allNames, varNames);
-            varValues = {shape.name, ...
-                position, ...
-                [rotationX rotationY rotationZ], ...
-                scale};
-            allValues = cat(2, allValues, varValues);
-        end
-        
-        % Insert lights.  This parallels object insertion above.
-        lightIndexes = randi(nLightShapes, [1, p.Results.nInsertedLights]);
-        insertLights = cell(1, p.Results.nInsertedLights);
-        for ll = 1:p.Results.nInsertedLights
-            light = lightShapes{lightIndexes(ll)};
-            
-            % Light rotation, position and scaling
-            rotationX = randi([0, 359]);
-            rotationY = randi([0, 359]);
-            rotationZ = randi([0, 359]);
-            if p.Results.lightPositionRandom
-                % Random light position
-                position = GetRandomPosition(baseSceneInfo.lightExcludeBox, baseSceneInfo.lightBox);
-            else
-                % Fixed light position that works for the Library base scene
-                position = [-6.504209 18.729564 5.017080];
-            end
-            if p.Results.lightScaleRandom
-                scale = 0.3 + rand()/2;
-            else
-                scale = 1;
-            end
-            
-            % Compute spatial transformation for the light
-            transformation = mexximpScale(scale) ...
-                * mexximpRotate([1 0 0], rotationX) ...
-                * mexximpRotate([0 1 0], rotationY) ...
-                * mexximpRotate([0 0 1], rotationZ) ...
-                * mexximpTranslate(position);
-            
-            lightName = sprintf('light-%d', ll);
-            insertLights{ll} = light.copy(...
-                'name', lightName, ...
-                'transformation', transformation);
-            
-            % Setup the conditions file for saving position of lights
-            lightColumn = sprintf('light-%d', ll);
-            positionColumn = sprintf('light-position-%d', ll);
-            rotationColumn = sprintf('light-rotation-%d', ll);
-            scaleColumn = sprintf('light-scale-%d', ll);
-            varNames = {lightColumn, positionColumn, rotationColumn, scaleColumn};
-            allNames = cat(2, allNames, varNames);
-            varValues = {light.name, ...
-                position, ...
-                [rotationX rotationY rotationZ], ...
-                scale};
-            allValues = cat(2, allValues, varValues);
-        end
         
         % Position the camera.
         %   Variable eye is position is from the first camera "slot"
@@ -548,13 +450,6 @@ for sceneIndex = 1:nScenes
             'name', 'blessBaseLights', ...
             'applyToInnerModels', false, ...
             'elementNameFilter', baseLightFilter);
-        
-        % Any lights we inserted
-        blessInsertedLights = VseMitsubaAreaLights( ...
-            'name', 'blessInsertedLights', ...
-            'applyToOuterModels', false, ...
-            'modelNameFilter', 'light-', ...
-            'elementNameFilter', '');
         
         % Assign spectra to all the lights.  
         % 
@@ -616,11 +511,11 @@ for sceneIndex = 1:nScenes
         
         % Define the VSE style for the rendering we are going to do.
         workingRecord.styles.normal = {fullRendering, ...
-            blessBaseLights, blessInsertedLights, areaLightSpectra, ...
+            blessBaseLights, areaLightSpectra, ...
             baseSceneDiffuse, insertedDiffuse, targetDiffuse};
         
         % Do the rendering
-        innerModels = [insertShapes{:} insertLights{:}];
+        innerModels = [insertShapes{:}];
         workingRecord.recipe = vseBuildRecipe(sceneData, innerModels, workingRecord.styles, 'hints', workingRecord.hints);
         workingRecord.recipe = rtbExecuteRecipe(workingRecord.recipe);
         
@@ -641,9 +536,9 @@ for sceneIndex = 1:nScenes
         save(fullfile(hints.workingFolder,workingRecord.hints.recipeName,'renderings','Mitsuba','luminanceImage'),'luminanceImage');
         imwrite(luminanceImage/max(luminanceImage(:)),fullfile(hints.workingFolder,workingRecord.hints.recipeName,'images','Mitsuba',[workingRecord.hints.recipeName,'_luminanceImage.png']),'png');
 
-    catch err
-        % Try to save out some diagnostic information if the rendering
-        % barfs.
-        SaveVirtualWorldError(originalsFolder, err, workingRecord.recipe, workingRecord);
-    end
+%     catch err
+%         % Try to save out some diagnostic information if the rendering
+%         % barfs.
+%         SaveVirtualWorldError(originalsFolder, err, workingRecord.recipe, workingRecord);
+%     end
 end

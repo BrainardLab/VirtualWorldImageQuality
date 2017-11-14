@@ -1,5 +1,5 @@
-function RunVirtualWorldRecipes(varargin)
-% RunVirtualWorldRecipes  Wrapper function for MakeRecipesByCombinations
+function RunParametricRecipe(varargin)
+% RunParametricRecipe  Wrapper function for MakeRecipesByCombinations
 % 
 % Description:
 %    Make, execute, and analyze virtual world recipes.  This is basically a
@@ -14,19 +14,12 @@ function RunVirtualWorldRecipes(varargin)
 %                  small to keep redering time low for rejected recipes
 %   'imageHeight'  - MakeRecipesByCombinations height, Should be kept
 %                  small to keep redering time low for rejected recipes
-%   'cropImageHalfSize'  - crop size for MakeRecipesByCombinations
 %   'nOtherObjectSurfaceReflectance' - Number of spectra to be generated
 %                   for choosing background surface reflectance (max 999)
 %   'luminanceLevels' - Luminance levels of target object
 %   'reflectanceNumbers' - A row vetor containing Reflectance Numbers of 
 %                   target object. These are just dummy variables to give a
 %                   unique name to each random spectra.
-%   'nInsertedLights' - Number of inserted lights
-%   'nInsertObjects' - Number of inserted objects (other than target object)
-%   'targetPixelThresholdMin' - minimum fraction of target pixels that
-%                 should be present in the cropped image.
-%   'targetPixelThresholdMax' - maximum fraction of target pixels that
-%                 should be present in the cropped image.
 %   'otherObjectReflectanceRandom' - boolean to specify if spectra of 
 %                   background objects is random or not. Default true
 %   'illuminantSpectraRandom' - boolean to specify if spectra of 
@@ -71,12 +64,9 @@ p = inputParser();
 p.addParameter('outputName','ExampleOutput',@ischar);
 p.addParameter('imageWidth', 320, @isnumeric);
 p.addParameter('imageHeight', 240, @isnumeric);
-p.addParameter('cropImageHalfSize', 25, @isnumeric);
 p.addParameter('nOtherObjectSurfaceReflectance', 100, @isnumeric);
 p.addParameter('luminanceLevels', [0.2 0.6], @isnumeric);
 p.addParameter('reflectanceNumbers', [1 2], @isnumeric);
-p.addParameter('nInsertedLights', 1, @isnumeric);
-p.addParameter('nInsertObjects', 0, @isnumeric);
 p.addParameter('targetPixelThresholdMin', 0.1, @isnumeric);
 p.addParameter('targetPixelThresholdMax', 0.6, @isnumeric);
 p.addParameter('otherObjectReflectanceRandom', true, @islogical);
@@ -92,12 +82,8 @@ p.addParameter('lightScaleRandom', true, @islogical);
 p.addParameter('targetPositionRandom', true, @islogical);
 p.addParameter('targetScaleRandom', true, @islogical);
 p.addParameter('targetRotationRandom', true, @islogical);
-p.addParameter('objectShapeSet', ...
-    {'Barrel', 'BigBall', 'ChampagneBottle', 'RingToy', 'SmallBall', 'Xylophone'}, @iscellstr);
-p.addParameter('lightShapeSet', ...
-    {'Barrel', 'BigBall', 'ChampagneBottle', 'RingToy', 'SmallBall', 'Xylophone'}, @iscellstr);
-p.addParameter('baseSceneSet', ...
-    {'CheckerBoard', 'IndoorPlant', 'Library', 'Mill', 'TableChairs', 'Warehouse'}, @iscellstr);
+p.addParameter('objectShape','Barrel', @ischar);
+p.addParameter('baseScene', 'Library', @ischar);
 p.addParameter('nRandomRotations', 0, @isnumeric);
 p.parse(varargin{:});
 
@@ -109,18 +95,15 @@ p.parse(varargin{:});
 % end
 
 %% Go through the steps for this combination of parameters.
-try
+%try
     % Using one base scene and one object at a time
-    MakeRecipesByCombinations( ...
+    MakeParametricRecipe( ...
         'outputName',p.Results.outputName,...
         'imageWidth', p.Results.imageWidth, ...
         'imageHeight', p.Results.imageHeight, ...
-        'cropImageHalfSize', p.Results.cropImageHalfSize, ...   
         'nOtherObjectSurfaceReflectance', p.Results.nOtherObjectSurfaceReflectance,...
         'luminanceLevels', p.Results.luminanceLevels, ...
         'reflectanceNumbers', p.Results.reflectanceNumbers,...
-        'nInsertedLights',p.Results.nInsertedLights,...
-        'nInsertObjects',p.Results.nInsertObjects, ...
         'otherObjectReflectanceRandom',p.Results.otherObjectReflectanceRandom,...
         'illuminantSpectraRandom',p.Results.illuminantSpectraRandom,...
         'illuminantSpectrumNotFlat',p.Results.illuminantSpectrumNotFlat,...
@@ -134,14 +117,13 @@ try
         'targetPositionRandom',p.Results.targetPositionRandom,...
         'targetScaleRandom',p.Results.targetScaleRandom,...
         'targetRotationRandom',p.Results.targetRotationRandom,...
-        'objectShapeSet', p.Results.objectShapeSet, ...
-        'lightShapeSet', p.Results.lightShapeSet, ...
-        'baseSceneSet', p.Results.baseSceneSet);
+        'objectShapeSet', {p.Results.objectShape}, ...
+        'baseSceneSet', {p.Results.baseScene});
     
-catch err
-    workingFolder = fullfile(getpref('VirtualWorldImageQuality', 'outputDataFolder'),p.Results.outputName);
-    SaveVirtualWorldError(workingFolder, err, 'RunVirtualWorldRecipes', varargin);
-end
+% catch err
+%     workingFolder = fullfile(getpref('VirtualWorldImageQuality', 'outputDataFolder'),p.Results.outputName);
+%     SaveVirtualWorldError(workingFolder, err, 'RunVirtualWorldRecipes', varargin);
+% end
 
 %% Save timing info.
 PlotVirtualWorldTiming('outputName',p.Results.outputName);

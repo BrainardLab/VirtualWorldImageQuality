@@ -1,25 +1,22 @@
 
 ouputName = 'ExampleScriptOutput';
 
-RunVirtualWorldRecipes(...
+RunParametricRecipe(...
     'outputName',ouputName, ...
     'imageWidth',320, ...
     'imageHeight',240, ...
-    'cropImageHalfSize', 25, ...                        % Size of cropped image is 2*cropImageHalfSize+1
     'nOtherObjectSurfaceReflectance', 999, ...          % Number of random surfaces to choose from
     'luminanceLevels',[0.3], ...                        % This can be a list
     'reflectanceNumbers',[1], ...                       % There are dummy indices for each luminance in the above list
-    'nInsertedLights', 1, ...                           % No of inserted lights
-    'nInsertObjects', 0, ...                            % These are objects other than target objects
     'otherObjectReflectanceRandom', true, ... 
     'illuminantSpectraRandom', true, ...
-    'illuminantSpectrumNotFlat',true, ...               % true is random shape, false flat
-    'targetSpectrumNotFlat',true, ...                   % true is random shape, false flat
-    'allTargetSpectrumSameShape', false, ...               % true = same spectra for all images
+    'illuminantSpectrumNotFlat',true, ...               % true is random shape, false is spectrally flat
+    'targetSpectrumNotFlat',true, ...                   % true is random shape, false is spectrally flat
+    'allTargetSpectrumSameShape', false, ...            % true = same spectra for all images
     'lightPositionRandom',true, ...                     % The false option will only work for library base scene
     'lightScaleRandom',true, ...
     'targetPositionRandom',true, ...                    % The false option will only work for library base scene
     'targetScaleRandom',false, ...
-    'objectShapeSet',{'Barrel'}, ...                          % {'Barrel', 'BigBall', 'ChampagneBottle', 'RingToy', 'SmallBall', 'Xylophone'}
-    'baseSceneSet',{'Library'}, ...                     % {'CheckerBoard', 'IndoorPlant', 'Library', 'Mill', 'TableChairs', 'Warehouse'}  
+    'objectShape','Barrel', ...                         % Currently choose from: 'Barrel', 'BigBall', 'ChampagneBottle', 'RingToy', 'SmallBall', 'Xylophone'
+    'baseScene','Library', ...                          % Currently choose from: 'CheckerBoard', 'IndoorPlant', 'Library', 'Mill', 'TableChairs', 'Warehouse'  
     'nRandomRotations', 0);
