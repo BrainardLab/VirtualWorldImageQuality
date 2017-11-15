@@ -20,10 +20,6 @@ function RunParametricRecipe(varargin)
 %   'reflectanceNumbers' - A row vetor containing Reflectance Numbers of 
 %                   target object. These are just dummy variables to give a
 %                   unique name to each random spectra.
-%   'otherObjectReflectanceRandom' - boolean to specify if spectra of 
-%                   background objects is random or not. Default true
-%   'illuminantSpectraRandom' - boolean to specify if spectra of 
-%                   illuminant is random or not. Default true
 %   'illuminantSpectrumNotFlat' - boolean to specify illumination spectra 
 %                   shape to be not flat, i.e. random, (true= random)
 %   'minMeanIlluminantLevel' - Min of mean value of ilumination spectrum
@@ -36,25 +32,9 @@ function RunParametricRecipe(varargin)
 %                   shape to be same at each reflectance number. This will
 %                   create multiple hue, but the same hue will be repeated
 %                   at each luminance level
-%   'lightPositionRandom' - boolean to specify illuminant position is fixed
-%                   or not. Default is true. False will only work for 
-%                   library-bigball case.
-%   'lightScaleRandom' - boolean to specify illuminant scale/size. Default 
-%                   is true.
-%   'targetPositionRandom' - boolean to specify illuminant scale/size. 
-%                   Default is true. False will only work for 
-%                   library-bigball case.
-%   'targetScaleRandom' - boolean to specify target scale/size is fixed or 
-%                   not. Default is true.
-%   'targetRotationRandom' - boolean to specify target angular position is 
-%                   fixed or not. Default is true. False will only work for 
-%                   Mill-Ringtoy case.
 %   'baseSceneSet'  - Base scenes to be used for renderings. One of these
 %                  base scenes is used for each rendering
 %   'objectShapeSet'  - Shapes of the target object other inserted objects
-%   'lightShapeSet'  - Shapes of the inserted illuminants
-%   'nRandomRotations'  - Number of random rotations applied to the
-%                   rendered image to get new set of cone responses
 
 %% Want each run to start with its own random seed
 rng('shuffle');
@@ -67,24 +47,14 @@ p.addParameter('imageHeight', 240, @isnumeric);
 p.addParameter('nOtherObjectSurfaceReflectance', 100, @isnumeric);
 p.addParameter('luminanceLevels', [0.2 0.6], @isnumeric);
 p.addParameter('reflectanceNumbers', [1 2], @isnumeric);
-p.addParameter('targetPixelThresholdMin', 0.1, @isnumeric);
-p.addParameter('targetPixelThresholdMax', 0.6, @isnumeric);
-p.addParameter('otherObjectReflectanceRandom', true, @islogical);
-p.addParameter('illuminantSpectraRandom', true, @islogical);
 p.addParameter('illuminantSpectrumNotFlat', true, @islogical);
 p.addParameter('minMeanIlluminantLevel', 10, @isnumeric);
 p.addParameter('maxMeanIlluminantLevel', 30, @isnumeric);
 p.addParameter('targetSpectrumNotFlat', true, @islogical);
 p.addParameter('allTargetSpectrumSameShape', false, @islogical);
 p.addParameter('targetReflectanceScaledCopies', false, @islogical);
-p.addParameter('lightPositionRandom', true, @islogical);
-p.addParameter('lightScaleRandom', true, @islogical);
-p.addParameter('targetPositionRandom', true, @islogical);
-p.addParameter('targetScaleRandom', true, @islogical);
-p.addParameter('targetRotationRandom', true, @islogical);
 p.addParameter('objectShape','Barrel', @ischar);
 p.addParameter('baseScene', 'Library', @ischar);
-p.addParameter('nRandomRotations', 0, @isnumeric);
 p.parse(varargin{:});
 
 %% Set up full-sized parpool if available.
@@ -104,19 +74,12 @@ p.parse(varargin{:});
         'nOtherObjectSurfaceReflectance', p.Results.nOtherObjectSurfaceReflectance,...
         'luminanceLevels', p.Results.luminanceLevels, ...
         'reflectanceNumbers', p.Results.reflectanceNumbers,...
-        'otherObjectReflectanceRandom',p.Results.otherObjectReflectanceRandom,...
-        'illuminantSpectraRandom',p.Results.illuminantSpectraRandom,...
         'illuminantSpectrumNotFlat',p.Results.illuminantSpectrumNotFlat,...
         'minMeanIlluminantLevel', p.Results.minMeanIlluminantLevel,...
         'maxMeanIlluminantLevel', p.Results.maxMeanIlluminantLevel,...
         'targetSpectrumNotFlat',p.Results.targetSpectrumNotFlat,...
         'allTargetSpectrumSameShape',p.Results.allTargetSpectrumSameShape,...
         'targetReflectanceScaledCopies',p.Results.targetReflectanceScaledCopies,...
-        'lightPositionRandom',p.Results.lightPositionRandom,...
-        'lightScaleRandom',p.Results.lightScaleRandom,...
-        'targetPositionRandom',p.Results.targetPositionRandom,...
-        'targetScaleRandom',p.Results.targetScaleRandom,...
-        'targetRotationRandom',p.Results.targetRotationRandom,...
         'objectShapeSet', {p.Results.objectShape}, ...
         'baseSceneSet', {p.Results.baseScene});
     

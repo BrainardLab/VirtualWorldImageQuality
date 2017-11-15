@@ -17,10 +17,6 @@ function MakeParametricRecipe(varargin)
 %   'reflectanceNumbers' - A row vetor containing Reflectance Numbers of
 %                   target object. These are just dummy variables to give a
 %                   unique name to each random spectra.
-%   'otherObjectReflectanceRandom' - boolean to specify if spectra of
-%                   background objects is random or not. Default true
-%   'illuminantSpectraRandom' - boolean to specify if spectra of
-%                   illuminant is random or not. Default true
 %   'illuminantSpectrumNotFlat' - boolean to specify illumination spectra
 %                   shape to be not flat, i.e. random, (true= random)
 %   'minMeanIlluminantLevel' - Min of mean value of ilumination spectrum
@@ -33,22 +29,9 @@ function MakeParametricRecipe(varargin)
 %                   shape to be same at each reflectance number. This will
 %                   create multiple hue, but the same hue will be repeated
 %                   at each luminance level
-%   'lightPositionRandom' - boolean to specify illuminant position is fixed
-%                   or not. Default is true. False will only work for
-%                   library-bigball case.
-%   'lightScaleRandom' - boolean to specify illuminant scale/size. Default
-%                   is true.
-%   'targetPositionRandom' - boolean to specify illuminant scale/size.
-%                   Default is true. False will only work for
-%                   library-bigball case.
-%   'targetScaleRandom' - boolean to specify target scale/size is fixed or
-%                   not. Default is true.
-%   'targetRotationRandom' - boolean to specify target angular position is
-%                   fixed or not. Default is true. False will only work for
 %   'baseSceneSet'  - Base scenes to be used for renderings. One of these
 %                  base scenes is used for each rendering
 %   'objectShapeSet'  - Shapes of the target object other inserted objects
-%   'lightShapeSet'  - Shapes of the inserted illuminants
 
 %% Want each run to start with its own random seed
 rng('shuffle');
@@ -62,19 +45,12 @@ p.addParameter('cropImageHalfSize', 25, @isnumeric);
 p.addParameter('nOtherObjectSurfaceReflectance', 100, @isnumeric);
 p.addParameter('luminanceLevels', [0.2 0.6], @isnumeric);
 p.addParameter('reflectanceNumbers', [1 2], @isnumeric);
-p.addParameter('otherObjectReflectanceRandom', true, @islogical);
-p.addParameter('illuminantSpectraRandom', true, @islogical);
 p.addParameter('illuminantSpectrumNotFlat', true, @islogical);
 p.addParameter('minMeanIlluminantLevel', 10, @isnumeric);
 p.addParameter('maxMeanIlluminantLevel', 30, @isnumeric);
 p.addParameter('targetSpectrumNotFlat', true, @islogical);
 p.addParameter('allTargetSpectrumSameShape', false, @islogical);
 p.addParameter('targetReflectanceScaledCopies', false, @islogical);
-p.addParameter('lightPositionRandom', true, @islogical);
-p.addParameter('lightScaleRandom', true, @islogical);
-p.addParameter('targetPositionRandom', true, @islogical);
-p.addParameter('targetScaleRandom', true, @islogical);
-p.addParameter('targetRotationRandom', true, @islogical);
 p.addParameter('objectShapeSet', ...
     {'Barrel', 'BigBall', 'ChampagneBottle', 'RingToy', 'SmallBall', 'Xylophone'}, @iscellstr);
 p.addParameter('lightShapeSet', ...
@@ -158,33 +134,19 @@ end
 % See comment above about the project specific 'outputDataFolder' preference, which defines
 % the parent folder for these.
 %
-% If p.Results.illuminantSpectraRandom is true, then many illuminant spectra are
-% defined, otherwise just one.
-%
 % * [NOTE - DHB: The hard coding of the number of illuminant spectra here
 %    not good, and should be made more transparent.]
 dataBaseDir = fullfile(getpref(projectName,'outputDataFolder'),p.Results.outputName,'Data');
 illuminantsFolder = fullfile(getpref(projectName,'outputDataFolder'),p.Results.outputName,'Data','Illuminants','BaseScene');
-if p.Results.illuminantSpectraRandom
-    if (p.Results.illuminantSpectrumNotFlat)
-        totalRandomLightSpectra = 999;
-        makeIlluminants(projectName,totalRandomLightSpectra,illuminantsFolder, ...
-            p.Results.minMeanIlluminantLevel, p.Results.maxMeanIlluminantLevel);
-    else
-        totalRandomLightSpectra = 10;
-        makeFlatIlluminants(totalRandomLightSpectra,illuminantsFolder, ...
-            p.Results.minMeanIlluminantLevel, p.Results.maxMeanIlluminantLevel);
-    end
+totalLightSpectra = 1;
+if (p.Results.illuminantSpectrumNotFlat)
+    makeIlluminants(projectName,totalLightSpectra,illuminantsFolder, ...
+        p.Results.minMeanIlluminantLevel, p.Results.maxMeanIlluminantLevel);
 else
-    totalRandomLightSpectra = 1;
-    if (p.Results.illuminantSpectrumNotFlat)
-        makeIlluminants(projectName,totalRandomLightSpectra,illuminantsFolder, ...
-            p.Results.minMeanIlluminantLevel, p.Results.maxMeanIlluminantLevel);
-    else
-        makeFlatIlluminants(totalRandomLightSpectra,illuminantsFolder, ...
-            p.Results.minMeanIlluminantLevel, p.Results.maxMeanIlluminantLevel);
-    end
+    makeFlatIlluminants(totalLightSpectra,illuminantsFolder, ...
+        p.Results.minMeanIlluminantLevel, p.Results.maxMeanIlluminantLevel);
 end
+
 
 %% Make some reflectances and store them where they want to be
 %
@@ -322,40 +284,21 @@ for sceneIndex = 1:nScenes
         %   function to improve readability at the top level.]
         
         % Target object rotation
+        % Fixed rotation.
+        % These values were chosen for the mill-ringtoy case by Vijay Singh
         targetShape = objectShapes{targetShapeIndex};
-        if p.Results.targetPositionRandom
-            % Random rotation
-            targetRotationX = randi([0, 359]);
-            targetRotationY = randi([0, 359]);
-            targetRotationZ = randi([0, 359]);
-        else
-            % Fixed rotation.
-            % These values were chosen for the mill-ringtoy case by Vijay Singh
-            targetRotationX = 0;
-            targetRotationY = 233;
-            targetRotationZ = 183;
-        end
+        targetRotationX = 0;
+        targetRotationY = 233;
+        targetRotationZ = 183;
+ 
+        % Fixed position.  Some possible choices below
+        % targetPosition = [ -0.010709 4.927981 0.482899];  % BigBall-Library Case 1
+        % targetPosition = [ 1.510709 5.527981 2.482899];   % BigBall-Library Case 2
+        % targetPosition = [ -0.510709 0.0527981 0.482899]; % BigBall-Library Case 3
+        targetPosition = [-2.626092 -6.054515 1.223028];    % BigBall-Mill Case 4
         
-        % Target object position
-        if p.Results.targetPositionRandom
-            % Random position
-            targetPosition = GetRandomPosition([0 0; 0 0; 0 0], baseSceneInfo.objectBox);
-        else
-            % Fixed position.  Some possible choices below
-            % targetPosition = [ -0.010709 4.927981 0.482899];  % BigBall-Library Case 1
-            % targetPosition = [ 1.510709 5.527981 2.482899];   % BigBall-Library Case 2
-            % targetPosition = [ -0.510709 0.0527981 0.482899]; % BigBall-Library Case 3
-            targetPosition = [-2.626092 -6.054515 1.223028];    % BigBall-Mill Case 4
-        end
-        
-        % Target object scaling
-        if p.Results.targetScaleRandom
-            % Random scaling
-            targetScale = 0.3 + rand()/2;
-        else
-            % Fixed scaling
-            targetScale =  1; % BigBall-Mill Case 4
-        end
+        % Fixed scaling
+        targetScale =  1; % BigBall-Mill Case 4   
         
         % Target object transformation
         transformation = mexximpScale(targetScale) ...
@@ -460,11 +403,7 @@ for sceneIndex = 1:nScenes
             'pluginType', 'area', ...
             'propertyName', 'radiance');
         areaLightSpectra.resourceFolder = dataBaseDir;
-        if p.Results.illuminantSpectraRandom
-            tempIlluminantSpectra = illuminantSpectra((randperm(length(illuminantSpectra))));
-        else
-            tempIlluminantSpectra = illuminantSpectra;
-        end
+        tempIlluminantSpectra = illuminantSpectra;
         areaLightSpectra.addManySpectra(tempIlluminantSpectra);
         
         % Assign spectra to materials in the base scene.
@@ -479,11 +418,7 @@ for sceneIndex = 1:nScenes
             'name', 'baseSceneDiffuse', ...
             'applyToInnerModels', false);
         baseSceneDiffuse.resourceFolder = dataBaseDir;
-        if p.Results.otherObjectReflectanceRandom
-            tempBaseSceneReflectances = baseSceneReflectances((randperm(length(baseSceneReflectances))));
-        else
-            tempBaseSceneReflectances = baseSceneReflectances;
-        end
+        tempBaseSceneReflectances = baseSceneReflectances;
         baseSceneDiffuse.addManySpectra(tempBaseSceneReflectances);
         
         % Assign spectra to all materials of inserted shapes
@@ -492,11 +427,8 @@ for sceneIndex = 1:nScenes
             'modelNameFilter', 'shape-',...
             'applyToOuterModels', false);
         insertedDiffuse.resourceFolder = dataBaseDir;
-        if p.Results.otherObjectReflectanceRandom
-            tempOtherObjectReflectances = otherObjectReflectances((randperm(length(otherObjectReflectances))));
-        else
-            tempOtherObjectReflectances = otherObjectReflectances;
-        end
+        tempOtherObjectReflectances = otherObjectReflectances((randperm(length(otherObjectReflectances))));
+        tempOtherObjectReflectances = otherObjectReflectances;
         insertedDiffuse.addManySpectra(tempOtherObjectReflectances);
         
         % Assign a specific reflectance to the target object

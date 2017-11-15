@@ -8,15 +8,9 @@ RunParametricRecipe(...
     'nOtherObjectSurfaceReflectance', 999, ...          % Number of random surfaces to choose from
     'luminanceLevels',[0.3], ...                        % This can be a list
     'reflectanceNumbers',[1], ...                       % There are dummy indices for each luminance in the above list
-    'otherObjectReflectanceRandom', true, ... 
-    'illuminantSpectraRandom', true, ...
     'illuminantSpectrumNotFlat',true, ...               % true is random shape, false is spectrally flat
     'targetSpectrumNotFlat',true, ...                   % true is random shape, false is spectrally flat
     'allTargetSpectrumSameShape', false, ...            % true = same spectra for all images
-    'lightPositionRandom',true, ...                     % The false option will only work for library base scene
-    'lightScaleRandom',true, ...
-    'targetPositionRandom',true, ...                    % The false option will only work for library base scene
-    'targetScaleRandom',false, ...
     'objectShape','Barrel', ...                         % Currently choose from: 'Barrel', 'BigBall', 'ChampagneBottle', 'RingToy', 'SmallBall', 'Xylophone'
-    'baseScene','Library', ...                          % Currently choose from: 'CheckerBoard', 'IndoorPlant', 'Library', 'Mill', 'TableChairs', 'Warehouse'  
-    'nRandomRotations', 0);
+    'baseScene','Library' ...                          % Currently choose from: 'CheckerBoard', 'IndoorPlant', 'Library', 'Mill', 'TableChairs', 'Warehouse'  
+    );
