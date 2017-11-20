@@ -280,25 +280,23 @@ for sceneIndex = 1:nScenes
         % This next block of code sets up where the target object
         % goes in the scene.
         %
-        % * [NOTE - DHB]: This is sort of long and might better be a
-        %   function to improve readability at the top level.]
+        % These positions taken from a run of the routine that chooses
+        % parameters randomly, but using annotated base scene info to help
+        % them be sensible.
         
         % Target object rotation
         % Fixed rotation.
         % These values were chosen for the mill-ringtoy case by Vijay Singh
         targetShape = objectShapes{targetShapeIndex};
-        targetRotationX = 0;
-        targetRotationY = 233;
-        targetRotationZ = 183;
+        targetRotationX = 265;
+        targetRotationY = 260;
+        targetRotationZ = 101;
  
         % Fixed position.  Some possible choices below
-        % targetPosition = [ -0.010709 4.927981 0.482899];  % BigBall-Library Case 1
-        % targetPosition = [ 1.510709 5.527981 2.482899];   % BigBall-Library Case 2
-        % targetPosition = [ -0.510709 0.0527981 0.482899]; % BigBall-Library Case 3
-        targetPosition = [-2.626092 -6.054515 1.223028];    % BigBall-Mill Case 4
+        targetPosition = [0.15769 -0.77352 -0.36083];    % Barrel-Library
         
         % Fixed scaling
-        targetScale =  1; % BigBall-Mill Case 4   
+        targetScale =  1;  
         
         % Target object transformation
         transformation = mexximpScale(targetScale) ...
