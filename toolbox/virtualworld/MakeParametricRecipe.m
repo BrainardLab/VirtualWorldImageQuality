@@ -341,11 +341,21 @@ for sceneIndex = 1:nScenes
         allValues = cat(2, allValues, varValues);
         
         % Position the camera.
-        %   Variable eye is position is from the first camera "slot"
-        %   Variable target is the target object's position
-        %   Variable up is direction somehow relative to the first camera "slot"
-        eye = baseSceneInfo.cameraSlots(1).position;
-        up = baseSceneInfo.cameraSlots(1).up;
+        %   Variable eye is [x y z] position is from the first camera "slot"
+        %   Variable target is the target object's [x y z] position
+        %   Variable up is [x y z] direction of "up" in the camera plane, I think.
+        %
+        % The mexximpLookAt function returns a camera transformation that
+        % makes the camera point at the object, from a position, and with
+        % the upward direction of the camear as passed
+        % with up as passed.
+        %
+        % This commented out is a way to get a reasonable camera position
+        % and up direction out of the annotations in the base scene.
+        % eye = baseSceneInfo.cameraSlots(1).position;
+        % up = baseSceneInfo.cameraSlots(1).up;
+        eye = [1.991 -5.8023 1.2662];
+        up = [0 0 1];
         lookAt = mexximpLookAt(eye, targetPosition, up);
         cameraName = sceneData.model.cameras(1).name;
         isCameraNode = strcmp(cameraName, {sceneData.model.rootNode.children.name});

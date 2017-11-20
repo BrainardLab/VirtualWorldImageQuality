@@ -12,5 +12,5 @@ RunParametricRecipe(...
     'targetSpectrumNotFlat',true, ...                   % true is random shape, false is spectrally flat
     'allTargetSpectrumSameShape', false, ...            % true = same spectra for all images
     'objectShape','Barrel', ...                         % Currently choose from: 'Barrel', 'BigBall', 'ChampagneBottle', 'RingToy', 'SmallBall', 'Xylophone'
-    'baseScene','Library' ...                          % Currently choose from: 'CheckerBoard', 'IndoorPlant', 'Library', 'Mill', 'TableChairs', 'Warehouse'  
+    'baseScene','Library' ...                           % Currently choose from: 'CheckerBoard', 'IndoorPlant', 'Library', 'Mill', 'TableChairs', 'Warehouse'  
     );
