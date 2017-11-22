@@ -18,11 +18,11 @@ function MakeParametricRecipe(varargin)
 %                   target object. These are just dummy variables to give a
 %                   unique name to each random spectra.
 %   'illuminantSpectrumNotFlat' - boolean to specify illumination spectra
-%                   shape to be not flat, i.e. random, (true= random)
+%                   shape to be spectrally not flat (true = not flat)
 %   'minMeanIlluminantLevel' - Min of mean value of ilumination spectrum
 %   'maxMeanIlluminantLevel' - Max of mean value of ilumination spectrum
-%   'targetSpectrumNotFlat' - boolean to specify arget spectra
-%                   shape to be not flat, i.e. random, (true= random)
+%   'targetSpectrumNotFlat' - boolean to specify target spectra
+%                   shape to be not spectrally flat(true = not flat)
 %   'allTargetSpectrumSameShape' - boolean to specify all target spectrum to
 %                   be of same shape
 %   'targetReflectanceScaledCopies' - boolean to specify target reflectance

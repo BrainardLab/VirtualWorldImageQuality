@@ -13,7 +13,6 @@ function makeFlatTargetReflectance(luminanceLevels,reflectanceNumbers, folderToS
 %   reflectanceNumbers = index to for filename at the desired luminanceLevel
 %   folderToStore = folder where the spectra should be stored
 %
-%
 % 02/02/2017 VS  Wrote it.
 
 % Desired wl sampling
@@ -23,9 +22,7 @@ end
 
 S = [400 5 61];
 theWavelengths = SToWls(S);
-
 nSurfaceAtEachLuminace = numel(reflectanceNumbers);
-theLuminanceTarget=reshape(repmat([0.2:0.4/9:0.6],10,1),100,1)';
 
 %% Load in spectral weighting function for luminance
 % This is the 1931 CIE standard
